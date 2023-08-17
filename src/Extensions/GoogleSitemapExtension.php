@@ -14,7 +14,6 @@ use Wilr\GoogleSitemaps\GoogleSitemap;
  */
 class GoogleSitemapExtension extends DataExtension
 {
-
     /**
      * @return boolean
      */
@@ -28,7 +27,7 @@ class GoogleSitemapExtension extends DataExtension
             // Subsite support
             if (class_exists(Subsite::class)) {
                 // Subsite will have a different domain from Director::protocolAndHost
-                if ($subsite = Subsite::currentSubsite()) {
+                if ($subsite = Subsite::currentSubsite()) { /* @phpstan-ignore-line */
                     $hostHttp = parse_url(Director::protocol() . $subsite->getPrimaryDomain(), PHP_URL_HOST);
                 }
             }
@@ -64,6 +63,10 @@ class GoogleSitemapExtension extends DataExtension
             } else {
                 $can = $override;
             }
+        }
+
+        if (is_array($can) && isset($can[0])) {
+            return $can[0];
         }
 
         return $can;
